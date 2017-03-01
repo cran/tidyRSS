@@ -13,17 +13,21 @@ vignette: >
 
 ## Introduction  
 
-tidyRSS is a package for extracting data from [RSS feeds](https://en.wikipedia.org/wiki/RSS). It has one function, `tidyfeed()`, which takes one argument, the url of the feed. Included in the package is a simple dataset, a list of feed urls, which you can use to experiment with (they were taken from [here](https://raw.githubusercontent.com/DataWookie/feedeR/master/tests/testthat/test-feeds.txt) and then put into a data frame with `strsplit()`). This vignette is designed to give you an idea of what tidyrss can be used for.  
+tidyRSS is a package for extracting data from [RSS feeds](https://en.wikipedia.org/wiki/RSS). It has one function, `tidyfeed()`, which takes one argument, the url of the feed. Included in the package is a simple dataset, a list of feed urls, which you can use to experiment with (they were taken from [here](https://raw.githubusercontent.com/DataWookie/feedeR/master/tests/testthat/test-feeds.txt)). This vignette is designed to give you an idea of what tidyRSS can be used for.  
 
 ## Installation
 
-tidyRSS can be installed from GitHub, using the devtools package.
+tidyRSS can be installed from GitHub, using the devtools package, or from CRAN directly.
 
 ```{r, message=F, eval = F}
 
 devtools::install_github("robertmyles/tidyrss")
 
+
+install.packages("tidyRSS")
+
 ```
+
 
 ## Usage 
 
@@ -42,7 +46,6 @@ Since the data are already in a tidy format, it's straightforward to use it with
 library(tidytext)
 library(dplyr)
 library(ggplot2)
-library(lubridate)
 
 data("stop_words")
   

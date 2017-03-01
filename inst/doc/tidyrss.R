@@ -2,6 +2,9 @@
 #  
 #  devtools::install_github("robertmyles/tidyrss")
 #  
+#  
+#  install.packages("tidyRSS")
+#  
 
 ## ---- eval = F-----------------------------------------------------------
 #  library(tidyRSS)
@@ -13,7 +16,6 @@
 #  library(tidytext)
 #  library(dplyr)
 #  library(ggplot2)
-#  library(lubridate)
 #  
 #  data("stop_words")
 #  
