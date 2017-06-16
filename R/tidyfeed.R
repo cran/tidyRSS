@@ -18,22 +18,22 @@
 #'   - "all": both the feed information (title, url, etc.) and the item information (title, creator, etc.) are returned.
 #'   - "feed": Only the information from the feed is returned, not the individual feed items.
 #'   - "items": opposite of the above.
-#' @examples
-
+#' @example
+#' \dontrun{
 #' # Atom feed:
 #' r_j <- tidyfeed("http://journal.r-project.org/rss.atom")
-#'
+#' }
 #' @export
-
 tidyfeed <- function(feed, result = c("all", "feed", "items")){
   invisible({
   suppressWarnings({
+  stopifnot(identical(length(feed), 1L)) # exit if more than 1 feed provided
   if(!grepl("http://", feed)){
     feed <- strsplit(feed, "://")[[1]][2]
     feed <-paste0("http://", feed)
   }
 
-  msg <- "\nThis page does not appear to be a suitable feed.\nHave you checked that you entered the url correctly?\nIf you are certain that this is a valid rss feed, please file an issue at: https://github.com/RobertMyles/tidyRSS/issues"
+  msg <- "This page does not appear to be a suitable feed. Have you checked that you entered the url correctly?\nIf you are certain that this is a valid rss feed, please file an issue at: https://github.com/RobertMyles/tidyRSS/issues. Please note that the feed may also be undergoing maintenance."
 
   formats <- c("a d b Y H:M:S z", "a, d b Y H:M z",
                "Y-m-d H:M:S z", "d b Y H:M:S",
@@ -42,14 +42,19 @@ tidyfeed <- function(feed, result = c("all", "feed", "items")){
 
   choice <- match.arg(result, choices = c("all", "feed", "items"))
 
-  doc <- httr::GET(feed) %>% xml2::read_xml()
+  doc <- try(httr::GET(feed) %>% xml2::read_xml(), silent = TRUE)
+
+  if(class(doc) == 'try-error'){
+    stop(msg)
+  }
 
 
   if(grepl("http://www.w3.org/2005/Atom", xml2::xml_attr(doc, "xmlns"))){
 
     ns <- xml2::xml_ns_rename(xml2::xml_ns(doc), d1 = "atom")
 
-    entries <- xml2::xml_find_all(doc, "atom:entry[position()>1]", ns = ns)
+    #entries <- xml2::xml_find_all(doc, "atom:entry[position()>1]", ns = ns)
+    entries <- xml2::xml_find_all(doc, "atom:entry", ns = ns)
 
     res <- tibble::tibble(
       feed_title = xml2::xml_text(xml2::xml_find_all(doc, ns = ns, "atom:title")),
@@ -65,9 +70,9 @@ tidyfeed <- function(feed, result = c("all", "feed", "items")){
       item_content = xml2::xml_text(xml2::xml_find_first(entries, ns = ns, "atom:content"))
     )
 
-    if(!grepl("http", res$feed_link)){
+    if(!grepl("http", unique(res$feed_link))){
       res$feed_link <- xml2::xml_text(xml2::xml_find_first(entries, ns = ns, "atom:origLink"))
-      if(!grepl("http", res$feed_link)){
+      if(!grepl("http", unique(res$feed_link))){
         res$feed_link <- xml2::xml_text(xml2::xml_find_first(entries, ns = ns, "atom:link"))
       }
     }
@@ -78,7 +83,7 @@ tidyfeed <- function(feed, result = c("all", "feed", "items")){
 
     channel <- xml2::xml_find_all(doc, "channel")
 
-    if(length(channel) == 0){
+    if(identical(length(channel), 0L)){
       ns <- xml2::xml_ns_rename(xml2::xml_ns(doc), d1 = "rss")
       channel <- xml2::xml_find_all(doc, "rss:channel", ns = ns)
       site <- xml2::xml_find_all(doc, "rss:item", ns = ns)
