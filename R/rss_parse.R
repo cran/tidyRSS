@@ -4,11 +4,15 @@ formats <- c("a d b Y H:M:S z", "a, d b Y H:M z",
              "a b dH:M:S Y")
 
 rss_parse <- function(doc){
-
   channel <- xml2::xml_find_all(doc, "channel")
 
   if(identical(length(channel), 0L)){
-    ns <- xml2::xml_ns_rename(xml2::xml_ns(doc), d1 = "rss")
+    if(any(names(xml2::xml_ns(doc)) == "d1")){
+      ns <- xml2::xml_ns_rename(xml2::xml_ns(doc), d1 = "rss")
+    } else{
+      ns <- xml2::xml_ns(doc)
+    }
+
     channel <- xml2::xml_find_all(doc, "rss:channel", ns = ns)
     site <- xml2::xml_find_all(doc, "rss:item", ns = ns)
 
