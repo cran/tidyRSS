@@ -19,6 +19,7 @@
 #' @description \code{tidyfeed()} downloads and parses rss feeds. The function
 #' produces a tidy data frame, easy to use for further manipulation and
 #' analysis.
+#' @inheritParams httr::GET
 #' @param feed (\code{character}). The url for the feed that you want to parse.
 #' @param sf . If TRUE, returns sf dataframe.
 #' @examples
@@ -33,14 +34,14 @@
 #' tidyfeed("http://www.geonames.org/recent-changes.xml")
 #' }
 #' @export
-tidyfeed <- function(feed, sf = TRUE){
+tidyfeed <- function(feed, sf = TRUE, config = list()){
   invisible({
   suppressWarnings({
   stopifnot(identical(length(feed), 1L)) # exit if more than 1 feed provided
 
   msg <- "Error in feed parse; please check URL.\nIf you're certain that this is a valid rss feed, please file an issue at https://github.com/RobertMyles/tidyRSS/issues. Please note that the feed may also be undergoing maintenance."
 
-  doc <- try(httr::GET(feed), silent = TRUE)
+  doc <- try(httr::GET(feed, config), silent = TRUE)
 
   if(grepl("json", doc$headers$`content-type`)){
     result <- json_parse(feed)
