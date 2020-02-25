@@ -4,111 +4,108 @@
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/tidyRSS)](https://cran.r-project.org/package=tidyRSS)
 [![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/tidyRSS)](https://CRAN.R-project.org/package=tidyRSS)
 [![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/grand-total/tidyRSS)](https://CRAN.R-project.org/package=tidyRSS)
+![R-CMD-check](https://github.com/RobertMyles/tidyRSS/workflows/R-CMD-check/badge.svg)
+[![Codecov test
+coverage](https://codecov.io/gh/RobertMyles/tidyRSS/branch/master/graph/badge.svg)](https://codecov.io/gh/RobertMyles/tidyRSS?branch=master)
 
 tidyRSS is a package for extracting data from [RSS
-feeds](https://en.wikipedia.org/wiki/RSS), including Atom feeds, JSON
-feeds and georss feeds.
-
-**Note: some users may experience problems with v1.2.10 – use the
-development version (1.2.11)**.
+feeds](https://en.wikipedia.org/wiki/RSS), including Atom feeds and JSON
+feeds. For geo-type feeds, see the section on changes in version 2
+below, or jump directly to
+[tidygeoRSS](https://github.com/RobertMyles/tidygeoRSS), which is
+designed for that purpose.
 
 It is easy to use as it only has one function, `tidyfeed()`, which takes
-two arguments, the url of the feed and a logical flag for whether you
-want a geoRSS feed returned as a simple features dataframe or not.
-Running this function will return a tidy data frame of the information
-contained in the feed. If the url is not an rss or atom feed, it will
-return an error message.
+four arguments:
 
-Included in the package is a simple dataset, a list of feed urls, which
-you can use to experiment with. You can access this with
-`data("feeds")`.
+  - the url of the feed;
+  - a logical flag for whether you want the feed returned as a tibble or
+    a list containing two tibbles;
+  - a logical flag for whether you want HTML tags removed from columns
+    in the dataframe;
+  - and a config list that is passed off to
+    [`httr::GET()`](https://httr.r-lib.org/reference/config.html).
 
 ## Installation
 
-It can be installed directly from CRAN with:
+It can be installed directly from [CRAN](https://cran.r-project.org/)
+with:
 
 ``` r
-
 install.packages("tidyRSS")
 ```
 
-The development version can be installed from GitHub with the devtools
-package.
+The development version can be installed from GitHub with the
+[remotes](https://github.com/r-lib/remotes) package:
 
 ``` r
-
-devtools::install_github("robertmyles/tidyrss")
+remotes::install_github("robertmyles/tidyrss")
 ```
 
 ## Usage
 
-RSS feeds can be parsed with `tidyfeed()`, and some examples are
-included in the “feeds” dataset. Here is an example of using the
-package:
+Here is how you can get the contents of the [R
+Journal](https://journal.r-project.org/):
 
 ``` r
-#library(tidyRSS)
-devtools::load_all()
-data("feeds")
+library(tidyRSS)
 
-# select a feed:
-rss <- sample(feeds$feeds, 1)
-
-tidyfeed(rss)
-#> # A tibble: 20 x 12
-#>    feed_title feed_link feed_description feed_last_updated   feed_language
-#>    <chr>      <chr>     <chr>            <dttm>              <chr>        
-#>  1 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#>  2 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#>  3 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#>  4 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#>  5 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#>  6 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#>  7 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#>  8 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#>  9 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#> 10 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#> 11 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#> 12 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#> 13 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#> 14 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#> 15 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#> 16 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#> 17 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#> 18 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#> 19 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#> 20 FiveThirt… https://… Nate Silver’s F… 2019-05-15 23:22:44 en-US        
-#> # … with 7 more variables: feed_update_period <chr>, item_title <chr>,
-#> #   item_creator <chr>, item_date_published <dttm>,
-#> #   item_description <chr>, item_link <chr>, item_categories <list>
+tidyfeed("http://journal.r-project.org/rss.atom")
 ```
 
-More information is contained in the vignette: `vignette("tidyrss",
-package = "tidyRSS")`.
+## Changes in version 2.0.0
+
+The biggest change in version 2 is that tidyRSS no longer attempts to
+parse geo-type feeds into [sf](https://github.com/r-spatial/sf/)
+tibbles. This functionality has been moved to
+[tidygeoRSS](https://github.com/RobertMyles/tidygeoRSS).
 
 ## Issues
 
-RSS & Atom XML feeds can be finicky things, if you find one that doesn’t
-work with `tidyfeed()`, [let me
-know](https://github.com/robertmyles/tidyrss/issues). Please include the
-url of the feed that you are trying. Pull requests and general feedback
-are welcome. Many feeds are malformed. What this means is that, for a
-well-formed feed, you’ll get back a tidy data frame with information on
-the feed and the individual items (like blog posts, for example),
-including content. For malformed feeds, it will be less than this, as
-`tidyfeed()` deletes `NA` columns, where the information wasn’t in the
-feed in the first place.
+XML feeds can be finicky things, if you find one that doesn’t work with
+`tidyfeed()`, feel free to create an
+[issue](https://github.com/robertmyles/tidyrss/issues) with the url of
+the feed that you are trying. Pull Requests are welcome if you’d like to
+try and fix it yourself. For older RSS feeds, some fields will almost
+never be ‘clean’, that is, they will contain things like newlines (`\n`)
+or extra quote marks. Cleaning these in a generic way is more or less
+impossible so I suggest you use
+[stringr](https://github.com/tidyverse/stringr),
+[strex](https://rorynolan.github.io/strex/) and/or tools from base R
+such as gsub to clean these. This will mainly affect the
+`item_description` column of a parsed RSS feed, and will not often
+affect Atom feeds (and should never be a problem with JSON).
 
 ## Related
 
-The package is a ‘tidy’ version of two other related packages,
-[rss](https://github.com/noahhl/r-does-rss) and
-[feedeR](https://github.com/DataWookie/feedeR), both of which return
-lists. In comparison to feedeR, tidyRSS returns more information from
-the RSS feed (if it exists), and development on rss seems to have
-stopped some time ago.
+There are two other related packages that I’m aware of:
+
+  - [rss](https://github.com/noahhl/r-does-rss)
+  - [feedeR](https://github.com/DataWookie/feedeR)
+
+In comparison to feedeR, tidyRSS returns more information from the RSS
+feed (if it exists), and development on rss seems to have stopped some
+time ago.
 
 # Other
 
-For an example Shiny app that uses geoRSS, see
-[here](https://github.com/RobertMyles/shinyGeoRSS).
+For the schemas used to develop the parsers in this package, see:
+
+  - RSS: <https://validator.w3.org/feed/docs/rss2.html>  
+  - Atom: <https://validator.w3.org/feed/docs/atom.html>  
+  - JSON: <https://jsonfeed.org/version/1>
+
+I’ve implemented most of the items in the schemas above. The following
+are not yet implemented:
+
+**Atom meta info:**
+
+  - contributor, generator, logo, subtitle
+
+**Rss meta info:**
+
+  - cloud
+  - image
+  - textInput
+  - skipHours
+  - skipDays

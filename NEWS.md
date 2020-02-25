@@ -1,3 +1,15 @@
+tidyRSS v2.0.0 (Release date: 24/02/2020)
+============
+Changes:
+Removed simple features parsing functionality to a sister package, tidygeoRSS. 
+More robust testing strategy, streamlined code and less dependencies.
+Removed dataset of rss feeds as I thought it unnecessary.
+
+tidyRSS v1.2.12 (Release date: 01/09/2019)
+============
+Changes:
+Pass default user-agent to httr::GET. This solves 403 errors from certain RSS feeds.
+
 tidyRSS v1.2.11 (Release date: 22/05/2019)
 ============
 Changes:
@@ -13,7 +25,7 @@ Small bugfix for category columns.
 tidyRSS v1.2.9 (Release date: 08/05/2019)
 ============
 Changes:
-Added funcionality to process dc:date tags in v1 RSS feeds and better handling of item category columns, see https://github.com/luke-a/tidyRSS/commit/c677022996fa971b49ef1a858ae21ca720b56c8e .
+Added functionality to process dc:date tags in v1 RSS feeds and better handling of item category columns, see https://github.com/luke-a/tidyRSS/commit/c677022996fa971b49ef1a858ae21ca720b56c8e .
 
 tidyRSS v1.2.8 (Release date: 05/03/2019)
 ============
