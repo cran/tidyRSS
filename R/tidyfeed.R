@@ -7,7 +7,7 @@
 #' @importFrom xml2 xml_attr xml_contents xml_ns
 #' @importFrom dplyr select full_join mutate_if mutate bind_cols
 #' @importFrom dplyr case_when across rowwise ungroup select_if
-#' @importFrom purrr map map_chr safely flatten compact keep map_df
+#' @importFrom purrr map map_chr safely flatten compact keep map_df discard
 #' @importFrom jsonlite parse_json
 #' @importFrom glue glue
 #' @importFrom vctrs new_vctr
@@ -18,7 +18,6 @@
 #' @description \code{tidyfeed()} downloads and parses rss feeds. The function
 #' produces either a tidy data frame or a named list, easy to use for further
 #' manipulation and analysis.
-#' @inheritParams httr::GET
 #' @param feed \code{character}, the url for the feed that you want to parse,
 #' e.g. "http://journal.r-project.org/rss.atom".
 #' @param config Arguments passed off to \code{httr::GET()}.
