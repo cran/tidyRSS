@@ -1,12 +1,13 @@
 Package: tidyRSS
 Type: Package
 Title: Tidy RSS for R
-Version: 2.0.5
+Version: 2.0.6
 Authors@R: c(
     person("Robert Myles", "McDonnell", email = "robertmylesmcdonnell@gmail.com", role = c("aut", "cre")),
     person("Jonathan", "Carroll", email = "jono@jcarroll.com.au", role = "ctb"),
     person("Mike", "Smith", email = "grimbough@gmail.com", role = "ctb"),
-    person("Joseph", "Stachelek", role = "ctb")
+    person("Joseph", "Stachelek", role = "ctb"),
+    person("Chung-hong", "Chan", email = "chainsawtiney@gmail.com", role = "ctb", comment = c(ORCID = "0000-0002-6232-7530"))
     )
 Maintainer: Robert Myles McDonnell <robertmylesmcdonnell@gmail.com>
 Description: 
@@ -24,10 +25,11 @@ Imports: xml2 (>= 1.3.1), httr(>= 1.4.1), magrittr (>= 1.5), tibble (>=
 Suggests: httptest, knitr, rmarkdown, covr, testthat
 RoxygenNote: 7.2.0
 NeedsCompilation: no
-Packaged: 2022-05-29 16:08:08 UTC; robert
+Packaged: 2022-08-25 13:39:33 UTC; robert
 Author: Robert Myles McDonnell [aut, cre],
   Jonathan Carroll [ctb],
   Mike Smith [ctb],
-  Joseph Stachelek [ctb]
+  Joseph Stachelek [ctb],
+  Chung-hong Chan [ctb] (<https://orcid.org/0000-0002-6232-7530>)
 Repository: CRAN
-Date/Publication: 2022-05-29 16:50:02 UTC
+Date/Publication: 2022-08-25 14:10:02 UTC
